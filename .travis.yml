@@ -4,8 +4,17 @@ install: true
 addons:
   sonarcloud:
     organization: "jgreen"
+    github_token:
+      secure: $GITHUB_PUBLIC_REPO
 jdk:
   - oraclejdk8
 script:
-  - mvn clean package sonar:sonar -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-  
+  - mvn clean install sonar:sonar -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
