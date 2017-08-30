@@ -1,1 +1,10 @@
 language: java
+sudo: false
+install: true
+addons:
+  sonarcloud:
+    organization: "jgreen"
+jdk:
+  - oraclejdk8
+script:
+  - mvn clean package sonar:sonar
