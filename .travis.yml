@@ -6,6 +6,8 @@ addons:
     organization: "jgreen"
     github_token:
       secure: $GITHUB_PUBLIC_REPO
+    branches:
+      - /.*/
 jdk:
   - oraclejdk8
 script:
