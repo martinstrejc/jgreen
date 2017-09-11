@@ -6,17 +6,23 @@ buildscript {
     dependencies {
         classpath 'org.owasp:dependency-check-gradle:2.1.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
+        classpath 'com.netflix.nebula:gradle-lint-plugin:latest.release'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'org.owasp.dependencycheck'
 apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'nebula.lint'
+gradleLint.rules = ['all-dependency', 'all-nebula-renames']
 
 apply from: 'gradle/versions.gradle'
 
 ext {
     slf4Version = '1.7.25'
+    cucumberVersion = '2.0.0'
+    seleniumVersion = '3.5.3'
+    springVersion = '4.3.11.RELEASE'
 }
 
 repositories {
@@ -25,8 +31,32 @@ repositories {
 }
 
 dependencies {
-    compile "org.slf4j:slf4j-api:${slf4Version}"
-    testCompile "org.slf4j:slf4j-log4j12:${slf4Version}"
-    testCompile "junit:junit:4.12"
-    testCompile "org.mockito:mockito-all:1.10.19"
+    compile 'commons-io:commons-io:2.5'
+    compile 'commons-lang:commons-lang:2.6'
+    compile 'javax.validation:validation-api:2.0.0.Final'
+    compile 'junit:junit:4.12'
+    compile 'org.aspectj:aspectjtools:1.8.10'
+    compile 'org.slf4j:slf4j-api:' + slf4Version
+
+    compile 'io.cucumber:cucumber-core:' + cucumberVersion
+    compile 'io.cucumber:cucumber-java:' + cucumberVersion
+    compile 'io.cucumber:cucumber-junit:' + cucumberVersion
+    compile 'io.cucumber:cucumber-spring:' + cucumberVersion
+
+    compile 'org.seleniumhq.selenium:selenium-api:' + seleniumVersion
+    compile 'org.seleniumhq.selenium:selenium-firefox-driver:' + seleniumVersion
+    compile 'org.seleniumhq.selenium:selenium-chrome-driver:' + seleniumVersion
+    compile 'org.seleniumhq.selenium:selenium-ie-driver:' + seleniumVersion
+    compile 'org.seleniumhq.selenium:selenium-remote-driver:' + seleniumVersion
+    compile 'org.seleniumhq.selenium:selenium-support:' + seleniumVersion
+
+    compile 'org.springframework:spring-beans:' + springVersion
+    compile 'org.springframework:spring-context:' + springVersion
+    compile 'org.springframework:spring-test:' + springVersion
+    compile 'org.springframework:spring-tx:' + springVersion
+
+    compile 'org.springframework.boot:spring-boot:1.5.6.RELEASE'
+
+    testCompile 'org.slf4j:slf4j-log4j12:' + slf4Version
+    testCompile 'org.mockito:mockito-core:2.10.0'
 }
