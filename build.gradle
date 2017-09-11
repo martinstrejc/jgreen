@@ -1,0 +1,32 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.owasp:dependency-check-gradle:2.1.1'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.owasp.dependencycheck'
+apply plugin: 'com.github.ben-manes.versions'
+
+apply from: 'gradle/versions.gradle'
+
+ext {
+    slf4Version = '1.7.25'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile "org.slf4j:slf4j-api:${slf4Version}"
+    testCompile "org.slf4j:slf4j-log4j12:${slf4Version}"
+    testCompile "junit:junit:4.12"
+    testCompile "org.mockito:mockito-all:1.10.19"
+}
