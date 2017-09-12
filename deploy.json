@@ -15,7 +15,7 @@
 
     "files":
         [
-        {"includePattern": "code/build/libs/.*\\.jar)"}
+        {"includePattern": "core/build/libs/.*\\.jar)"}
         ],
     "publish": false
 }
