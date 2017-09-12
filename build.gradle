@@ -8,6 +8,7 @@ buildscript {
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
         classpath 'com.netflix.nebula:gradle-lint-plugin:latest.release'
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
 
@@ -26,6 +27,8 @@ ext {
     cucumberVersion = '2.0.0'
     seleniumVersion = '3.5.3'
     springVersion = '4.3.11.RELEASE'
+
+    build_version = "0.0.1"
 }
 
 allprojects {
@@ -34,3 +37,8 @@ allprojects {
         jcenter()
     }
 }
+if (System.env.TRAVIS_TAG != null && !System.env.TRAVIS_TAG.isEmpty()) {
+    ext.build_version = System.env.TRAVIS_TAG
+}
+
+

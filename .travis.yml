@@ -21,10 +21,5 @@ cache:
   - '$HOME/.sonar/cache'
   - '$HOME/.gradle'
   - '.gradle'
-deploy:
-  provider: bintray
-  file: "deploy.json"
-  user: "petacz"
-  key: $BINTRAY_API_KEY
-  on:
-    branch: deploy
+after_success:
+  test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload
