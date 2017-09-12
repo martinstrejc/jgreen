@@ -15,7 +15,7 @@
 
     "files":
         [
-        {"includePattern": "core/build/libs/(.*\\.jar)", "uploadPattern": "docs/$1"}
+        {"includePattern": "core/build/libs/(.*\\.jar)", "uploadPattern": "$1"}
         ],
     "publish": false
 }
