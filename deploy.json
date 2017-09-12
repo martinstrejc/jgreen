@@ -1,0 +1,21 @@
+{
+    "package": {
+        "name": "jGreen",
+        "repo": "jGreen",
+        "subject": "jgreen",
+        "licenses": ["Apache-2.0"],
+        "labels": ["jGreen", "Selenium", "Cucumber", "Testing", "Framework"],
+        "public_download_numbers": true,
+        "public_stats": true
+    },
+
+    "version": {
+        "name": "0.0.1"
+    },
+
+    "files":
+        [
+        {"includePattern": "code/build/libs/.*\\.jar)"}
+        ],
+    "publish": false
+}

@@ -18,6 +18,6 @@ import cz.wicketstuff.jgreen.core.webdriver.WebDriverConfig;
           WebDriverConfig.class
         })
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-public class UatSupportConfig {
+public class JGreenSupportConfig {
 
 }
