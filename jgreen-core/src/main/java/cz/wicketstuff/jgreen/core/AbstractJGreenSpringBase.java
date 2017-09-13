@@ -16,12 +16,15 @@
  */
 package cz.wicketstuff.jgreen.core;
 
+import org.springframework.test.context.ContextConfiguration;
+
 /**
  * Abstract test class initializing Spring context and all framework dependencies
  * 
  * @author Martin Strejc
  *
  */
+@ContextConfiguration(classes={JGreenContextConfiguration.class})
 public abstract class AbstractJGreenSpringBase {
 
 }

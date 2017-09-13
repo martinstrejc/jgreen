@@ -17,10 +17,13 @@
 package cz.wicketstuff.jgreen.core;
 
 import static org.junit.Assert.*;
+
+import javax.inject.Inject;
+
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.test.context.ContextConfiguration;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -30,10 +33,15 @@ import cucumber.api.java.en.When;
  * @author Martin Strejc
  *
  */
-@ContextConfiguration(classes={JGreenContextConfiguration.class})
 public class AbstractJGreenSpringBaseGlue extends AbstractJGreenSpringBase implements ApplicationContextAware  {
 
 	private ApplicationContext applicationContext;
+	
+	@Autowired
+	private ApplicationContext applicationContextSpring;
+
+	@Inject
+	private ApplicationContext applicationContextJEE;
 	
 	@When("^The glue code extends AbstractJGreenSpringBase$")
 	public void the_glue_code_extends_AbstractJGreenSpringBase() throws Exception {
@@ -45,8 +53,8 @@ public class AbstractJGreenSpringBaseGlue extends AbstractJGreenSpringBase imple
 		assertTrue("This glue code instance is not a subclass for ApplicationContextAware", ApplicationContextAware.class.isAssignableFrom(this.getClass()));
 	}
 
-	@Then("^the Spring context is autowired$")
-	public void the_Spring_context_is_autowired() throws Exception {
+	@Then("^the Spring context is autowired via a setter$")
+	public void the_Spring_context_is_autowired_via_a_setter() throws Exception {
 		assertNotNull(applicationContext);
 	}
 
@@ -55,4 +63,13 @@ public class AbstractJGreenSpringBaseGlue extends AbstractJGreenSpringBase imple
 		this.applicationContext = applicationContext;
 	}
 
+	@Then("^the Spring context is autowired into a Spring annotated field$")
+	public void the_Spring_context_is_autowired_into_a_Spring_annotated_field() throws Exception {
+		assertNotNull(applicationContextSpring);		
+	}
+
+	@Then("^the Spring context is autowired into a JEE annotated field$")
+	public void the_Spring_context_is_autowired_into_a_JEE_annotated_field() throws Exception {
+		assertNotNull(applicationContextJEE);		
+	}
 }
