@@ -2,6 +2,12 @@ apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = '0.7.9'
+    applyTo junitPlatformTest
+}
 
 dependencies {
     compile 'commons-io:commons-io:2.5'
@@ -113,3 +119,16 @@ bintray {
         }
     }
 }
+
+task junit5CodeCoverageReport(type:JacocoReport){
+    executionData junitPlatformTest
+    sourceSets sourceSets.main
+    sourceDirectories = files(project.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(project.sourceSets.main.output)
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+test.finalizedBy junit5CodeCoverageReport
