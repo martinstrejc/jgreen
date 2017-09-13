@@ -33,37 +33,36 @@ dependencies {
     testCompile 'org.mockito:mockito-core:2.10.0'
 }
 
-//task sourcesJar(type: Jar, dependsOn: classes) {
-//    classifier = 'sources'
-//    from sourceSets.main.allSource
-//}
-//
-//task javadocJar(type: Jar, dependsOn: javadoc) {
-//    classifier = 'javadoc'
-//    from javadoc.destinationDir
-//}
-//
-//artifacts {
-//    archives sourcesJar
-//    archives javadocJar
-//}
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
 
 publishing {
     publications {
         jgreenPublication(MavenPublication) {
             from components.java
-            groupId 'cz.wicketstuff'
-            artifactId 'jgreen'
-            version '0.0.1'
+            groupId 'cz.wicketstuff.jgreen'
+            artifactId 'jgreen-core'
+            version project.build_version
 
-//            artifact sourcesJar
-//            artifact javadocJar
+            artifact sourcesJar
+            artifact javadocJar
         }
     }
 }
 
 bintray {
-    println "VERSION: " + project.build_version
     user = System.env.BINTRAY_USER
     key = System.env.BINTRAY_API_KEY
     publications = ['jgreenPublication']

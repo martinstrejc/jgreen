@@ -28,7 +28,7 @@ ext {
     seleniumVersion = '3.5.3'
     springVersion = '4.3.11.RELEASE'
 
-    build_version = "0.0.1"
+    build_version = "dev"
 }
 
 allprojects {
