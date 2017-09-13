@@ -58,6 +58,33 @@ publishing {
 
             artifact sourcesJar
             artifact javadocJar
+
+            pom.withXml {
+                asNode().with {
+                    appendNode('name', 'jGreen')
+                    appendNode('description', 'Java Green - BDD style functional testing tool based on Selenium, Cucumber and Spring')
+                    appendNode('url', 'http://jgreen.wicketstuff.cz/')
+                    appendNode('licenses').with {
+                        appendNode('license').with {
+                            appendNode('name', 'The Apache License, Version 2.0')
+                            appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+                        }
+                    }
+                    appendNode('developers').with {
+                        appendNode('developer').with {
+                            appendNode('name', 'Martin Strejc')
+                            appendNode('email', 'martin.strejc@diamon.cz')
+                            appendNode('organization', 'Diamon')
+                            appendNode('organizationUrl', 'http://jgreen.wicketstuff.cz/')
+                        }
+                    }
+                    appendNode('scm').with {
+                        appendNode('developerConnection', 'scm:git:git@github.com:martinstrejc/jgreen.git')
+                        appendNode('connection', 'scm:git:https://github.com/martinstrejc/jgreen.git')
+                        appendNode('url', 'https://github.com/martinstrejc/jgreen/')
+                    }
+                }
+            }
         }
     }
 }
@@ -67,6 +94,7 @@ bintray {
     key = System.env.BINTRAY_API_KEY
     publications = ['jgreenPublication']
     publish = false
+    override = false
     pkg {
         repo = 'jGreen'
         name = 'jGreen'
