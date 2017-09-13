@@ -5,3 +5,7 @@ dependencies {
     compile 'io.cucumber:cucumber-core:' + cucumberVersion
     compile 'junit:junit:4.12'
 }
+
+sonarqube {
+    skipProject = true
+}
