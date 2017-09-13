@@ -16,8 +16,10 @@ buildscript {
 apply plugin: 'org.owasp.dependencycheck'
 apply plugin: "org.sonarqube"
 
-apply plugin: 'nebula.lint'
-gradleLint.rules = ['all-dependency', 'all-nebula-renames']
+allprojects {
+    apply plugin: 'nebula.lint'
+    gradleLint.rules = ['all-dependency', 'all-nebula-renames']
+}
 
 apply plugin: 'com.github.ben-manes.versions'
 apply from: 'gradle/versions.gradle'
@@ -42,4 +44,8 @@ if (System.env.TRAVIS_TAG != null && !System.env.TRAVIS_TAG.isEmpty()) {
     ext.build_version = System.env.TRAVIS_TAG
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2-rc-2'
+    distributionType = "ALL"
+}
 
