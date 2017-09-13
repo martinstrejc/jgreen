@@ -9,6 +9,7 @@ buildscript {
         classpath 'com.netflix.nebula:gradle-lint-plugin:latest.release'
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
     }
 }
 
@@ -21,12 +22,12 @@ gradleLint.rules = ['all-dependency', 'all-nebula-renames']
 apply plugin: 'com.github.ben-manes.versions'
 apply from: 'gradle/versions.gradle'
 
-
 ext {
     slf4Version = '1.7.25'
     cucumberVersion = '2.0.0'
     seleniumVersion = '3.5.3'
     springVersion = '4.3.11.RELEASE'
+    jUnitVersion = '5.0.0'
 
     build_version = "dev"
 }

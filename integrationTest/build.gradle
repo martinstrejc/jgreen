@@ -2,4 +2,6 @@ apply plugin: 'java-library'
 
 dependencies {
     compile project(':jgreen-core')
+    compile 'io.cucumber:cucumber-core:' + cucumberVersion
+    compile 'junit:junit:4.12'
 }
