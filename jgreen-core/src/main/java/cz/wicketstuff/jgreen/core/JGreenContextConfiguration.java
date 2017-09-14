@@ -16,13 +16,50 @@
  */
 package cz.wicketstuff.jgreen.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 /**
  * @author Martin Strejc
  *
  */
 @Configuration
-public class JGreenContextConfiguration {
+@PropertySource(name="jgreen", value = {
+        "classpath:cz/wicketstuff/jgreen/core/jgreen-default.properties", 
+        "classpath:jgreen.properties", 
+        "classpath:jgreen-${spring.profiles.active}.properties"
+        }, ignoreResourceNotFound = true)
+@EnableConfigurationProperties(JGreenSettings.class)
+public class JGreenContextConfiguration implements ApplicationListener<ApplicationEvent> {
+	
+	private static final Logger log = LoggerFactory.getLogger(JGreenContextConfiguration.class);
+	
+	@Autowired
+	private JGreenSettings jGreenSettings;
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+	@Override
+	public void onApplicationEvent(ApplicationEvent event) {
+		if (event instanceof ContextRefreshedEvent) {
+            // ApplicationContext applicationContext = ((ContextRefreshedEvent) event).getApplicationContext();
+            log.info(jGreenSettings.getName() + " has been initialized");
+        }
+		
+	}
+    
+    
 
 }

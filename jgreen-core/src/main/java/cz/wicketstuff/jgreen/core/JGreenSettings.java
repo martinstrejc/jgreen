@@ -16,30 +16,28 @@
  */
 package cz.wicketstuff.jgreen.core;
 
-import cucumber.api.CucumberOptions;
-import cucumber.api.junit.Cucumber;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Run from Gradle CLI: ./gradlew :cleanTest :test --tests cz.wicketstuff.jgreen.core.AbstractJGreenSpringBaseTest
+ * @author Martin Strejc
  *
  */
-@RunWith(Cucumber.class)
-@CucumberOptions(
-        monochrome = true,
-        plugin = { "pretty", "html:build/cucumber-reports/html", "json:build/cucumber-reports/cucumber.json" },
-        features = { "src/test/java/cz/wicketstuff/jgreen/core" },
-        glue = { "cz.wicketstuff.jgreen.core" },
-        tags = {"not @Ignore"},
-        junit = {"--filename-compatible-names"}
-)
-public class AbstractJGreenSpringBaseTest {
+@ConfigurationProperties(prefix="jgreen.core")
+public class JGreenSettings {
+	
+    @NotNull
+    @Valid
+    private String name;
 
-    @Test
-    public void dummyTest() {
-        // real tests are in *.feature and Glue files, this one is only to make them runnable as junits
-    }
+	public String getName() {
+		return name;
+	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+    
 }
