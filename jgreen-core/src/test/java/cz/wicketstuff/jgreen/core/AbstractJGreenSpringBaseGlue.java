@@ -17,9 +17,17 @@
 package cz.wicketstuff.jgreen.core;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+
+import java.io.StringWriter;
 
 import javax.inject.Inject;
 
+import org.apache.log4j.Appender;
+import org.apache.log4j.SimpleLayout;
+import org.apache.log4j.WriterAppender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -35,6 +43,8 @@ import cucumber.api.java.en.When;
  */
 public class AbstractJGreenSpringBaseGlue extends AbstractJGreenSpringBase implements ApplicationContextAware  {
 
+	private static final Logger log = LoggerFactory.getLogger(AbstractJGreenSpringBaseGlue.class);
+	
 	private ApplicationContext applicationContext;
 	
 	@Autowired
@@ -45,6 +55,9 @@ public class AbstractJGreenSpringBaseGlue extends AbstractJGreenSpringBase imple
 
 	@Autowired
 	private JGreenSettings jGreenSettings;
+	
+	private Appender appender;
+	private StringWriter logWriter = new StringWriter();
 
 	@When("^The glue code extends AbstractJGreenSpringBase$")
 	public void the_glue_code_extends_AbstractJGreenSpringBase() throws Exception {
@@ -85,5 +98,19 @@ public class AbstractJGreenSpringBaseGlue extends AbstractJGreenSpringBase imple
 	public void the_text_My_Cucumber_Test_is_injected_into_the_configuration_bean() throws Exception {
 	    assertEquals("My Cucumber Test", jGreenSettings.getName());
 	}
-	
+
+	@When("^a message is logged via slf4j$")
+	public void a_message_is_logged_via_slf4j() throws Exception {
+		logWriter = new StringWriter();
+		appender = new WriterAppender(new SimpleLayout(), logWriter);
+		org.apache.log4j.Logger.getRootLogger().addAppender(appender);
+		log.info("a message is really logged via slf4j");
+	}
+
+	@Then("^the message appears in the log4j log$")
+	public void the_message_appears_in_the_log4j_log() throws Exception {
+		org.apache.log4j.Logger.getRootLogger().removeAppender(appender);
+		assertThat(logWriter.toString(), containsString("a message is really logged via slf4j"));
+	}
+
 }

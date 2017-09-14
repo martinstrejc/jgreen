@@ -22,4 +22,7 @@ Scenario: Configuration profiles applied to properties
     When jgreen.properties file overrides jgreen.name property to 'My Cucumber Test'
     Then the text 'My Cucumber Test' is injected into the configuration bean
     
+Scenario: Log messages from tests
+    When a message is logged via slf4j
+    Then the message appears in the log4j log
     	
