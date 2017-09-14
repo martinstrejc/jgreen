@@ -16,7 +16,10 @@
  */
 package cz.wicketstuff.jgreen.core;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+
+import cz.wicketstuff.jgreen.core.webdriver.HtmlService;
 
 /**
  * Abstract test class initializing Spring context and all framework dependencies
@@ -27,4 +30,7 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(classes={JGreenContextConfiguration.class})
 public abstract class AbstractJGreenSpringBase {
 
+	@Autowired
+	public HtmlService html;
+	
 }
