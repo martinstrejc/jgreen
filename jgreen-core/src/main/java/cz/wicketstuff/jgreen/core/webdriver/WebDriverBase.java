@@ -32,11 +32,11 @@ import static org.junit.Assert.*;
  *
  */
 public class WebDriverBase implements ScreenshotProvider {
-
     private static final Logger log = LoggerFactory.getLogger(WebDriverBase.class);
-    
-    public static final String ATTRIBUTE_TRUE = "true";
-    public static final String ATTRIBUTE_FALSE = "false";
+
+    private static final String ATTRIBUTE_TRUE = "true";
+    private static final String ATTRIBUTE_FALSE = "false";
+    private static final String TIMEOUT = "timeout";
 
     @Autowired
     protected WebDriver driver;
@@ -152,7 +152,7 @@ public class WebDriverBase implements ScreenshotProvider {
             }
             sleep(1000);
         }
-        fail("timeout");
+        fail(TIMEOUT);
     }
 
     public void waitForElementNotPresent(By by) throws InterruptedException {
@@ -166,7 +166,7 @@ public class WebDriverBase implements ScreenshotProvider {
             }
             sleep(1000);
         }
-        fail("timeout");
+        fail(TIMEOUT);
     }
 
     public void waitAndClick(By by) throws InterruptedException {
@@ -308,6 +308,10 @@ public class WebDriverBase implements ScreenshotProvider {
             if (attributeEquals(by, attribute, expectedValue)) return;
             sleep(1000);
         }
+        failTimeout(timeInSeconds, attribute, expectedValue);
+    }
+
+    private void failTimeout(int timeInSeconds, String attribute, String expectedValue) {
         fail("Attribute '" + attribute + "' timeout, the value " + expectedValue + " has not bean reached for " + timeInSeconds + " s");
     }
 
@@ -320,7 +324,7 @@ public class WebDriverBase implements ScreenshotProvider {
             if (!attributeEquals(by, attribute, expectedValue)) return;
             sleep(1000);
         }
-        fail("Attribute '" + attribute + "' timeout, the value " + expectedValue + " has not bean reached for " + timeInSeconds + " s");
+        failTimeout(timeInSeconds, attribute, expectedValue);
     }
 
     public boolean attributeEquals(By by, String attribute, String expectedValue) {
@@ -328,12 +332,10 @@ public class WebDriverBase implements ScreenshotProvider {
     }
 
     public boolean attributeContains(By by, String attribute, String expectedValue) {
-       // return expectedValue.contains(getElementAttribute(by, attribute));
         return getElementAttribute(by, attribute).contains(expectedValue);
     }
 
     public boolean attributeNotContains(By by, String attribute, String expectedValue) {
-        //return !expectedValue.contains(getElementAttribute(by, attribute));
         return !getElementAttribute(by, attribute).contains(expectedValue);
     }
 
@@ -342,7 +344,7 @@ public class WebDriverBase implements ScreenshotProvider {
             if (attributeContains(by, attribute, expectedValue)) return;
             sleep(1000);
         }
-        fail("Attribute '" + attribute + "' timeout, the value " + expectedValue + " has not bean reached for " + timeInSeconds + " s");
+        failTimeout(timeInSeconds, attribute, expectedValue);
     }
 
     public void waitForAttributeNotContains(By by, String attribute, String expectedValue) throws InterruptedException {
@@ -354,7 +356,7 @@ public class WebDriverBase implements ScreenshotProvider {
             if (attributeNotContains(by, attribute, expectedValue)) return;
             sleep(1000);
         }
-        fail("Attribute '" + attribute + "' timeout, the value " + expectedValue + " has not bean reached for " + timeInSeconds + " s");
+        failTimeout(timeInSeconds, attribute, expectedValue);
     }
 
     public void waitForAttributeContains(By by, String attribute, String expectedValue) throws InterruptedException {
@@ -370,7 +372,7 @@ public class WebDriverBase implements ScreenshotProvider {
             if (attributeFalse(by, attribute)) return;
             sleep(1000);
         }
-        fail("timeout");
+        fail(TIMEOUT);
     }
 
     public boolean isAttributePresent(By by, String attribute) {
@@ -394,7 +396,7 @@ public class WebDriverBase implements ScreenshotProvider {
             if (!isAttributePresent(by, attribute)) return;
             sleep(1000);
         }
-        fail("timeout");
+        fail(TIMEOUT);
     }
 
     public void waitForAttributePresent(By by, String attribute) throws InterruptedException {
@@ -406,7 +408,7 @@ public class WebDriverBase implements ScreenshotProvider {
             if (isAttributePresent(by, attribute)) return;
             sleep(1000);
         }
-        fail("timeout");
+        fail(TIMEOUT);
     }
 
     /*

@@ -49,3 +49,6 @@ task wrapper(type: Wrapper) {
     distributionType = DistributionType.ALL
 }
 
+subprojects {
+    task allDeps(type: DependencyReportTask) {}
+}

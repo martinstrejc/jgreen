@@ -44,7 +44,7 @@ public class WebDriverFactoryBean
 
     private final WebDriverSettings settings;
      
-    private Set<WebDriver> driverInstances = new CopyOnWriteArraySet<WebDriver>();
+    private Set<WebDriver> driverInstances = new CopyOnWriteArraySet<>();
 
     public WebDriverFactoryBean(WebDriverSettings settings) {
         this.settings = settings;
