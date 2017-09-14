@@ -22,4 +22,5 @@ cache:
   - '$HOME/.gradle'
   - '.gradle'
 after_success:
-  test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload
+  - ./gradlew artifactoryPublish
+  - test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload

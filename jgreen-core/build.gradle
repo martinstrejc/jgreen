@@ -3,6 +3,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'jacoco'
+apply plugin: "com.jfrog.artifactory"
 
 jacoco {
     toolVersion = '0.7.9'
@@ -65,7 +66,7 @@ publishing {
             from components.java
             groupId 'cz.wicketstuff.jgreen'
             artifactId 'jgreen-core'
-            version project.build_version
+            version project.version
 
             artifact sourcesJar
             artifact javadocJar
@@ -113,9 +114,26 @@ bintray {
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/martinstrejc/jgreen.git'
         version {
-            name = project.build_version
+            name = project.version
             desc = 'Java Green - BDD style functional testing tool based on Selenium, Cucumber and Spring'
             released = new Date()
+        }
+    }
+}
+
+artifactory {
+    contextUrl = "https://oss.jfrog.org/artifactory"   //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = System.env.BINTRAY_USER
+            password = System.env.BINTRAY_API_KEY
+            maven = true
+        }
+        defaults {
+            publications('jgreenPublication')
+            publishArtifacts = true
+            publishPom = true
         }
     }
 }
@@ -132,3 +150,9 @@ task junit5CodeCoverageReport(type:JacocoReport){
 }
 
 test.finalizedBy junit5CodeCoverageReport
+
+sonarqube {
+    properties {
+        property 'sonar.jacoco.reportPaths', 'build/jacoco/junitPlatformTest.exec'
+    }
+}
