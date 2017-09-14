@@ -42,7 +42,10 @@ public class AbstractJGreenSpringBaseGlue extends AbstractJGreenSpringBase imple
 
 	@Inject
 	private ApplicationContext applicationContextJEE;
-	
+
+	@Autowired
+	private JGreenSettings jGreenSettings;
+
 	@When("^The glue code extends AbstractJGreenSpringBase$")
 	public void the_glue_code_extends_AbstractJGreenSpringBase() throws Exception {
 		assertTrue("This glue code instance is not a subclass for AbstractJGreenSpringBase", AbstractJGreenSpringBase.class.isAssignableFrom(this.getClass()));
@@ -72,4 +75,15 @@ public class AbstractJGreenSpringBaseGlue extends AbstractJGreenSpringBase imple
 	public void the_Spring_context_is_autowired_into_a_JEE_annotated_field() throws Exception {
 		assertNotNull(applicationContextJEE);		
 	}
+	
+	@When("^jgreen\\.properties file overrides jgreen\\.name property to 'My Cucumber Test'$")
+	public void jgreen_properties_file_overrides_jgreen_name_property_to_My_Cucumber_Test() throws Exception {
+	    // this step has not implementation, check the file jgreen.property
+	}
+
+	@Then("^the text 'My Cucumber Test' is injected into the configuration bean$")
+	public void the_text_My_Cucumber_Test_is_injected_into_the_configuration_bean() throws Exception {
+	    assertEquals("My Cucumber Test", jGreenSettings.getName());
+	}
+	
 }
