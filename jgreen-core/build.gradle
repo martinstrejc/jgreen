@@ -154,7 +154,7 @@ test.finalizedBy junit5CodeCoverageReport
 
 sonarqube {
     properties {
-        property 'sonar.junit.reportsPath', 'build/test-results/junit-platform/TEST-junit-jupiter.xml'
+        property 'sonar.junit.reportPaths', 'build/test-results/junit-platform'
         property 'sonar.jacoco.reportPaths', 'build/jacoco/junitPlatformTest.exec'
     }
 }
