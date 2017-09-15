@@ -57,15 +57,27 @@ public class HtmlService {
             return false;
         }
     }
-
-    public void waitForElement(By by, long timeInSeconds) {
-        for (int second = 0; second < timeInSeconds; second++) {
-            if (isElementPresent(by)) {
-                return;
-            }
-            timer.sleepSecond();
+    
+    public boolean isElementPresent(By by, int timeInSeconds) {
+        boolean present = false;
+        int second = 0;
+        while (!(present = isElementPresent(by)) && ++second <= timeInSeconds) {
+        	timer.sleepSecond();
         }
-        fail("Timeout message.....");
+        return present;
+    } 
+
+    public void waitForElement(By by, int timeInSeconds) {
+        if (!isElementPresent(by, timeInSeconds)) {
+	        fail("Element " + by.toString() + " has not been found in " 
+	        		+ timeInSeconds + " s");
+        }
+    }
+
+    public void waitForElementNotPresent(By by, int timeInSeconds) {
+        if (isElementPresent(by, timeInSeconds)) {
+        	fail("Element " + by.toString() + " has been unfortunately found");
+        }
     }
 
 }

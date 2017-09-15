@@ -65,6 +65,8 @@ public class HtmlServiceTest {
 	
 	int inv = 0;
 	
+	// isElementPresent
+	
 	@Test
 	public void isElementPresent_exists() {
 		doReturn(mock(WebElement.class)).when(driver).findElement(EL_BY);
@@ -77,6 +79,7 @@ public class HtmlServiceTest {
 		assertFalse(html.isElementPresent(EL_BY));
 	}
 
+	// waitForElement
 	
 	@Test
 	public void waitForElement_found() {
@@ -85,7 +88,7 @@ public class HtmlServiceTest {
 		html.waitForElement(EL_BY, 5);
 		verify(timer, times(2)).sleepSecond();
 	}
-
+	
 	@Test(expected = AssertionError.class)
 	public void waitForElement_notfound() {
 		doAnswer(invocation -> {throw NO_SUCH_ELEMENT_EX;}).when(driver).findElement(EL_BY);
@@ -95,16 +98,47 @@ public class HtmlServiceTest {
 	@Test
 	public void waitForElement_max_timeout() {
 		inv = 0;
-		doAnswer(invocation -> {if (++inv > 4 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
+		doAnswer(invocation -> {if (++inv > 5 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
 		html.waitForElement(EL_BY, 5);
-		verify(timer, times(4)).sleepSecond();
+		verify(timer, times(5)).sleepSecond();
 	}
 
 	@Test(expected = AssertionError.class)
-	public void waitForElement_max_timeout_border() {
+	public void waitForElement_max_timeout_over_border() {
+		inv = 0;
+		doAnswer(invocation -> {if (++inv > 6 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
+		html.waitForElement(EL_BY, 5);
+	}
+
+	
+	// waitForElementNotPresent
+
+	@Test(expected = AssertionError.class)
+	public void waitForElementNotPresent_found() {
+		inv = 0;
+		doAnswer(invocation -> {if (++inv > 2 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
+		html.waitForElementNotPresent(EL_BY, 5);
+	}
+
+	@Test
+	public void waitForElementNotPresent_notfound() {
+		doAnswer(invocation -> {throw NO_SUCH_ELEMENT_EX;}).when(driver).findElement(EL_BY);
+		html.waitForElementNotPresent(EL_BY, 5);
+	}
+
+	@Test(expected = AssertionError.class)
+	public void waitForElementNotPresent_max_timeout() {
 		inv = 0;
 		doAnswer(invocation -> {if (++inv > 5 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
-		html.waitForElement(EL_BY, 5);
+		html.waitForElementNotPresent(EL_BY, 5);
+		verify(timer, times(5)).sleepSecond();
+	}
+
+	@Test
+	public void waitForElementNotPresent_max_timeout_over_border() {
+		inv = 0;
+		doAnswer(invocation -> {if (++inv > 6 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
+		html.waitForElementNotPresent(EL_BY, 5);
 	}
 
 }

@@ -133,18 +133,22 @@ public class WebDriverBase implements ScreenshotProvider {
     All about waiting
      */
     
+    @Deprecated
     public void sleep(long timeInMillis) throws InterruptedException {
         Thread.sleep(timeInMillis);
     }
 
+    @Deprecated
     public void sleepSeconds(int seconds) throws InterruptedException {
         sleep(seconds * 1000L);
     }
 
+    // TODO default timeout
     public void waitForElement(By by) throws InterruptedException {
         waitForElement(getDefaultWaitSeconds(), by);
     }
 
+    @Deprecated
     public void waitForElement(int timeInSeconds, By by) throws InterruptedException {
         for (int second = 0; second < timeInSeconds; second++) {
             if (isElementPresent(by)) {
