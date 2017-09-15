@@ -163,6 +163,7 @@ public class WebDriverBase implements ScreenshotProvider {
         waitForElementNotPresent(getDefaultWaitSeconds(), by);
     }
 
+    @Deprecated
     public void waitForElementNotPresent(int timeInSeconds, By by) throws InterruptedException {
         for (int second = 0; second < timeInSeconds; second++) {
             if (!isElementPresent(by)) {
@@ -177,6 +178,7 @@ public class WebDriverBase implements ScreenshotProvider {
         waitAndClick(getDefaultWaitSeconds(), by);
     }
 
+    @Deprecated
     public void waitAndClick(int timeInSeconds, By by) throws InterruptedException {
         waitForElement(timeInSeconds, by);
         click(by);
@@ -210,10 +212,12 @@ public class WebDriverBase implements ScreenshotProvider {
     Element actions
      */
 
+    @Deprecated
     public void click(By by) {
         findElement(by).click();
     }
 
+    @Deprecated
     public WebElement findElement(By by) {
         return driver.findElement(by);
     }
@@ -278,6 +282,7 @@ public class WebDriverBase implements ScreenshotProvider {
         return ATTRIBUTE_FALSE.equals(getElementAttribute(by, attribute));
     }
     
+    @Deprecated
     public String getElementAttribute(By by, String attribute) {
         return findElement(by).getAttribute(attribute);
     }

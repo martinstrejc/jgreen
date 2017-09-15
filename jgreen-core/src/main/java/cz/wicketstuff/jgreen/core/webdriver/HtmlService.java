@@ -34,7 +34,11 @@ import cz.wicketstuff.jgreen.core.misc.TimerService;
 public class HtmlService {
 	
 	private static final Logger log = LoggerFactory.getLogger(HtmlService.class);
-	
+
+    private static final String ATTRIBUTE_TRUE = "true";
+    
+    private static final String ATTRIBUTE_FALSE = "false";
+
 	protected final WebDriver driver;
 	
 	private final TimerService timer;
@@ -78,6 +82,44 @@ public class HtmlService {
         if (isElementPresent(by, timeInSeconds)) {
         	fail("Element " + by.toString() + " has been unfortunately found");
         }
+    }
+
+    public void click(By by) {
+        findElement(by).click();
+    }
+    
+    public void waitAndClick(By by, int timeInSeconds) {
+        waitForElement(by, timeInSeconds);
+        click(by);
+    }
+
+    public String getElementAttribute(By by, String attribute) {
+        return findElement(by).getAttribute(attribute);
+    }
+
+    public boolean isAttributeValue(By by, String attribute, String value, int timeInSeconds) {
+        boolean attr = false;
+        int second = 0;
+        while (!(attr = compareAttributeValue(by, attribute, value)) && ++second <= timeInSeconds) {
+        	timer.sleepSecond();
+        }
+        return attr;
+    }
+    
+    public void waitForAttributeTrue(By by, String attribute, int timeInSeconds) {
+        if (!isAttributeValue(by, attribute, ATTRIBUTE_TRUE, timeInSeconds)) {
+            fail("Attribute '" + attribute + "' timeout, the TRUE value has not bean reached for " + timeInSeconds + " s");        	
+        }
+    }
+
+    public void waitForAttributeFalse(By by, String attribute, int timeInSeconds) {
+        if (!isAttributeValue(by, attribute, ATTRIBUTE_FALSE, timeInSeconds)) {
+            fail("Attribute '" + attribute + "' timeout, the FALSE value has not bean reached for " + timeInSeconds + " s");        	
+        }
+    }
+    
+    public boolean compareAttributeValue(By by, String attribute, String value) {
+    	return value.equalsIgnoreCase(getElementAttribute(by, attribute));
     }
 
 }

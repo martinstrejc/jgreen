@@ -42,11 +42,10 @@ public class HtmlServiceTest {
 
 	private static final Logger log = LoggerFactory.getLogger(HtmlServiceTest.class);
 	
-	private static final By EL_BY = By.id("element1");
 	
 	private static final NoSuchElementException NO_SUCH_ELEMENT_EX = new NoSuchElementException("element1");
 
-	private static final WebElement EL = mock(WebElement.class);
+	int inv = 0;
 	
 	@Mock
 	private WebDriver driver;
@@ -57,13 +56,18 @@ public class HtmlServiceTest {
 	@Spy
 	@InjectMocks
 	private HtmlService html;
+
+	@Mock
+	private WebElement EL;
+	
+	private By EL_BY;
 	
 	@Before
 	public void beforeEach() {
 		MockitoAnnotations.initMocks(this);
+		inv = 0;
+		EL_BY = spy(By.id("element1"));
 	}
-	
-	int inv = 0;
 	
 	// isElementPresent
 	
@@ -83,7 +87,6 @@ public class HtmlServiceTest {
 	
 	@Test
 	public void waitForElement_found() {
-		inv = 0;
 		doAnswer(invocation -> {if (++inv > 2 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
 		html.waitForElement(EL_BY, 5);
 		verify(timer, times(2)).sleepSecond();
@@ -97,7 +100,6 @@ public class HtmlServiceTest {
 
 	@Test
 	public void waitForElement_max_timeout() {
-		inv = 0;
 		doAnswer(invocation -> {if (++inv > 5 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
 		html.waitForElement(EL_BY, 5);
 		verify(timer, times(5)).sleepSecond();
@@ -105,7 +107,6 @@ public class HtmlServiceTest {
 
 	@Test(expected = AssertionError.class)
 	public void waitForElement_max_timeout_over_border() {
-		inv = 0;
 		doAnswer(invocation -> {if (++inv > 6 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
 		html.waitForElement(EL_BY, 5);
 	}
@@ -115,7 +116,6 @@ public class HtmlServiceTest {
 
 	@Test(expected = AssertionError.class)
 	public void waitForElementNotPresent_found() {
-		inv = 0;
 		doAnswer(invocation -> {if (++inv > 2 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
 		html.waitForElementNotPresent(EL_BY, 5);
 	}
@@ -128,7 +128,6 @@ public class HtmlServiceTest {
 
 	@Test(expected = AssertionError.class)
 	public void waitForElementNotPresent_max_timeout() {
-		inv = 0;
 		doAnswer(invocation -> {if (++inv > 5 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
 		html.waitForElementNotPresent(EL_BY, 5);
 		verify(timer, times(5)).sleepSecond();
@@ -136,9 +135,93 @@ public class HtmlServiceTest {
 
 	@Test
 	public void waitForElementNotPresent_max_timeout_over_border() {
-		inv = 0;
 		doAnswer(invocation -> {if (++inv > 6 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
 		html.waitForElementNotPresent(EL_BY, 5);
+	}
+
+	// waitAndClick
+	@Test
+	public void waitAndClick() {
+		doAnswer(invocation -> {if (++inv > 2 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
+		doNothing().when(EL).click();
+		html.waitAndClick(EL_BY, 5);
+		verify(timer, times(2)).sleepSecond();
+		verify(EL, times(1)).click();
+	}
+	
+	// compareAttributeValue
+	
+	@Test
+	public void compareAttributeValue_true() {
+		doReturn(EL).when(driver).findElement(EL_BY);
+		doReturn("true").when(EL).getAttribute("attr1");
+		assertTrue(html.compareAttributeValue(EL_BY, "attr1", "true"));
+	}
+
+	@Test
+	public void compareAttributeValue_tRUe_case_sensitive() {
+		doReturn(EL).when(driver).findElement(EL_BY);
+		doReturn("tRUe").when(EL).getAttribute("attr1");
+		assertTrue(html.compareAttributeValue(EL_BY, "attr1", "true"));
+	}
+
+	@Test
+	public void compareAttributeValue_false() {
+		doReturn(EL).when(driver).findElement(EL_BY);
+		doReturn("false").when(EL).getAttribute("attr1");
+		assertFalse(html.compareAttributeValue(EL_BY, "attr1", "true"));
+	}
+
+	@Test
+	public void compareAttributeValue_FALSE_case_sensitive() {
+		doReturn(EL).when(driver).findElement(EL_BY);
+		doReturn("FALSE").when(EL).getAttribute("attr1");
+		assertFalse(html.compareAttributeValue(EL_BY, "attr1", "true"));
+	}
+
+	@Test
+	public void compareAttributeValue_empty() {
+		doReturn(EL).when(driver).findElement(EL_BY);
+		doReturn("").when(EL).getAttribute("attr1");
+		assertFalse(html.compareAttributeValue(EL_BY, "attr1", "true"));
+	}
+
+	@Test
+	public void compareAttributeValue_missing_attribute() {
+		doReturn(EL).when(driver).findElement(EL_BY);
+		assertFalse(html.compareAttributeValue(EL_BY, "attr1", "true"));
+	}
+	
+	// waitForAttributeTrue
+
+	@Test
+	public void waitForAttributeTrue_found() {
+		doAnswer(invocation -> ++inv > 2 ? "true" : null).when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeTrue(EL_BY, "attr1", 5);
+		verify(timer, times(2)).sleepSecond();
+	}
+
+	@Test(expected = AssertionError.class)
+	public void waitForAttributeTrue_timeout() {
+		doAnswer(invocation -> ++inv > 6 ? "true" : null).when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeTrue(EL_BY, "attr1", 5);
+	}
+
+	@Test
+	public void waitForAttributeTrue_border() {
+		doAnswer(invocation -> ++inv > 5 ? "true" : null).when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeTrue(EL_BY, "attr1", 5);
+	}
+
+	@Test(expected = AssertionError.class)
+	public void waitForAttributeTrue_false() {
+		doReturn("false").when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeTrue(EL_BY, "attr1", 5);
+		verify(timer, times(5)).sleepSecond();
 	}
 
 }
