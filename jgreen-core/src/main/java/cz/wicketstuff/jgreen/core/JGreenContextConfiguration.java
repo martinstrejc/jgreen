@@ -28,6 +28,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
+import cz.wicketstuff.jgreen.core.misc.TimerService;
+import cz.wicketstuff.jgreen.core.misc.TimerServiceImpl;
+import cz.wicketstuff.jgreen.core.webdriver.HtmlService;
+
 /**
  * @author Martin Strejc
  *
@@ -58,6 +62,17 @@ public class JGreenContextConfiguration implements ApplicationListener<Applicati
             log.info(jGreenSettings.getName() + " has been initialized");
         }
 		
+	}
+	
+	@Bean
+	public TimerService timer() {
+		return new TimerServiceImpl();
+	}
+	
+	@Bean
+	public HtmlService html(TimerService timer) {
+		// TODO add webdriver here
+		return new HtmlService(null, timer);
 	}
     
     

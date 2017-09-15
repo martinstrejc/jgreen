@@ -25,6 +25,8 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cz.wicketstuff.jgreen.core.misc.TimerService;
+
 /**
  * @author Martin Strejc
  *
@@ -33,10 +35,13 @@ public class HtmlService {
 	
 	private static final Logger log = LoggerFactory.getLogger(HtmlService.class);
 	
-	protected WebDriver driver;
+	protected final WebDriver driver;
+	
+	private final TimerService timer;
 
-	public HtmlService(WebDriver webDriver) {
+	public HtmlService(WebDriver webDriver, TimerService timer) {
 		this.driver = webDriver;
+		this.timer = timer;
 	}
 
 	public WebElement findElement(By by) {
@@ -48,7 +53,7 @@ public class HtmlService {
             findElement(by);
             return true;
         } catch (NoSuchElementException e) {
-            log.debug("Element hasn't been found", e);
+            log.trace("Element hasn't been found", e);
             return false;
         }
     }
@@ -58,26 +63,9 @@ public class HtmlService {
             if (isElementPresent(by)) {
                 return;
             }
-            sleepSecond();
+            timer.sleepSecond();
         }
         fail("Timeout message.....");
-    }
-    
-    protected void sleepSecond() {
-    	sleepSeconds(1);
-    }
-
-    protected void sleepSeconds(int seconds) {
-        sleep(seconds * 1000L);
-    }
-
-    protected void sleep(long timeInMillis) {
-    	try {
-			Thread.sleep(timeInMillis);
-		} catch (InterruptedException e) {
-			log.error("The thread " + Thread.currentThread().getName() + " has been interrupted while sleeping, zZZ");
-			Thread.currentThread().interrupt();
-		}
     }
 
 }

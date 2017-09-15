@@ -21,9 +21,18 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cz.wicketstuff.jgreen.core.misc.TimerService;
 
 /**
  * @author Martin Strejc
@@ -31,31 +40,71 @@ import org.openqa.selenium.WebElement;
  */
 public class HtmlServiceTest {
 
-	private static final int NOP_SLEEP_5000 = 5000;
+	private static final Logger log = LoggerFactory.getLogger(HtmlServiceTest.class);
+	
+	private static final By EL_BY = By.id("element1");
+	
+	private static final NoSuchElementException NO_SUCH_ELEMENT_EX = new NoSuchElementException("element1");
+
+	private static final WebElement EL = mock(WebElement.class);
+	
+	@Mock
 	private WebDriver driver;
+
+	@Mock
+	private TimerService timer;
+
+	@Spy
+	@InjectMocks
 	private HtmlService html;
 	
 	@Before
 	public void beforeEach() {
-		driver = mock(WebDriver.class);
-		html = spy(new HtmlService(driver));
-		doNothing().when(html).sleep(NOP_SLEEP_5000);
-		doNothing().when(html).sleep(1);
+		MockitoAnnotations.initMocks(this);
+	}
+	
+	int inv = 0;
+	
+	@Test
+	public void isElementPresent_exists() {
+		doReturn(mock(WebElement.class)).when(driver).findElement(EL_BY);
+		assertTrue(html.isElementPresent(EL_BY));
 	}
 
 	@Test
-	public void sleepSeconds_5() {
-		html.sleepSeconds(5);
-		verify(html, times(1)).sleep(NOP_SLEEP_5000);
+	public void isElementPresent_missing() {
+		doThrow(new NoSuchElementException("element1")).when(driver).findElement(EL_BY);
+		assertFalse(html.isElementPresent(EL_BY));
 	}
-/*
+
+	
 	@Test
-	public void waitForElement() {
-		By elBy = By.id("element1"); 
-		doAnswer(invocation -> mock(WebElement.class)).when(driver).findElement(elBy);
-		html.waitForElement(elBy, 10);
-		verify(html, times(3)).sleepSecond();;
+	public void waitForElement_found() {
+		inv = 0;
+		doAnswer(invocation -> {if (++inv > 2 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
+		html.waitForElement(EL_BY, 5);
+		verify(timer, times(2)).sleepSecond();
 	}
-*/
+
+	@Test(expected = AssertionError.class)
+	public void waitForElement_notfound() {
+		doAnswer(invocation -> {throw NO_SUCH_ELEMENT_EX;}).when(driver).findElement(EL_BY);
+		html.waitForElement(EL_BY, 5);
+	}
+
+	@Test
+	public void waitForElement_max_timeout() {
+		inv = 0;
+		doAnswer(invocation -> {if (++inv > 4 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
+		html.waitForElement(EL_BY, 5);
+		verify(timer, times(4)).sleepSecond();
+	}
+
+	@Test(expected = AssertionError.class)
+	public void waitForElement_max_timeout_border() {
+		inv = 0;
+		doAnswer(invocation -> {if (++inv > 5 ) {return EL;} else {throw NO_SUCH_ELEMENT_EX;}}).when(driver).findElement(EL_BY);
+		html.waitForElement(EL_BY, 5);
+	}
 
 }
