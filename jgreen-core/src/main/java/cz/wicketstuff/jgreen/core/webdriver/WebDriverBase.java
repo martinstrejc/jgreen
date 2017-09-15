@@ -434,6 +434,7 @@ public class WebDriverBase implements ScreenshotProvider {
         assertTrue(driver.findElement(by).getText().matches("^[\\s\\S]*"+text+"[\\s\\S]*$"));
     }
 
+    @Deprecated
     public String storeElementText(By by) throws Exception {
         return driver.findElement(by).getText();
     }

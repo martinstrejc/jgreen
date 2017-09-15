@@ -224,4 +224,77 @@ public class HtmlServiceTest {
 		verify(timer, times(5)).sleepSecond();
 	}
 
+	
+	// waitForAttributeFalse
+
+	@Test
+	public void waitForAttributeFalse_found() {
+		doAnswer(invocation -> ++inv > 2 ? "false" : null).when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeFalse(EL_BY, "attr1", 5);
+		verify(timer, times(2)).sleepSecond();
+	}
+
+	@Test(expected = AssertionError.class)
+	public void waitForAttributeFalse_timeout() {
+		doAnswer(invocation -> ++inv > 6 ? "false" : null).when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeFalse(EL_BY, "attr1", 5);
+	}
+
+	@Test
+	public void waitForAttributeFalse_border() {
+		doAnswer(invocation -> ++inv > 5 ? "false" : null).when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeFalse(EL_BY, "attr1", 5);
+	}
+
+	@Test(expected = AssertionError.class)
+	public void waitForAttributeFalse_true() {
+		doReturn("true").when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeFalse(EL_BY, "attr1", 5);
+		verify(timer, times(5)).sleepSecond();
+	}
+
+	
+	// waitForAttributeNotEquals
+
+	@Test(expected = AssertionError.class)
+	public void waitForAttributeNotEquals_found() {
+		doAnswer(invocation -> ++inv > 2 ? "false" : null).when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeNotEquals(EL_BY, "attr1", "true", 5);
+		verify(timer, times(2)).sleepSecond();
+	}
+
+	@Test
+	public void waitForAttributeNotEquals_timeout() {
+		doAnswer(invocation -> ++inv > 6 ? "false" : null).when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeNotEquals(EL_BY, "attr1", "true", 5);
+	}
+
+	@Test
+	public void waitForAttributeNotEquals_timeout2() {
+		doAnswer(invocation -> ++inv > 6 ? "true" : null).when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeNotEquals(EL_BY, "attr1", "true", 5);
+	}
+
+	@Test
+	public void waitForAttributeNotEquals_border() {
+		doAnswer(invocation -> ++inv > 5 ? "false" : null).when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeNotEquals(EL_BY, "attr1", "true", 5);
+	}
+
+	@Test(expected = AssertionError.class)
+	public void waitForAttributeNotEquals_true() {
+		doReturn("true").when(EL).getAttribute("attr1");
+		doReturn(EL).when(driver).findElement(EL_BY);
+		html.waitForAttributeNotEquals(EL_BY, "attr1", "true", 5);
+		verify(timer, times(5)).sleepSecond();
+	}
+
 }

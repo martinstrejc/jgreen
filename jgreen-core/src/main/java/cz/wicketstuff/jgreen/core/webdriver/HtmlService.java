@@ -107,19 +107,35 @@ public class HtmlService {
     }
     
     public void waitForAttributeTrue(By by, String attribute, int timeInSeconds) {
-        if (!isAttributeValue(by, attribute, ATTRIBUTE_TRUE, timeInSeconds)) {
-            fail("Attribute '" + attribute + "' timeout, the TRUE value has not bean reached for " + timeInSeconds + " s");        	
-        }
+    	waitForAttributeEquals(by, attribute, ATTRIBUTE_TRUE, timeInSeconds);
     }
 
     public void waitForAttributeFalse(By by, String attribute, int timeInSeconds) {
-        if (!isAttributeValue(by, attribute, ATTRIBUTE_FALSE, timeInSeconds)) {
-            fail("Attribute '" + attribute + "' timeout, the FALSE value has not bean reached for " + timeInSeconds + " s");        	
+    	waitForAttributeEquals(by, attribute, ATTRIBUTE_FALSE, timeInSeconds);
+    }
+
+    public void waitForAttributeEquals(By by, String attribute, String value, int timeInSeconds) {
+        if (!isAttributeValue(by, attribute, value, timeInSeconds)) {
+            fail("Attribute '" + attribute + "' timeout, the '" 
+            		+ value 
+            		+ "' value has not bean reached for " + timeInSeconds + " s");        	
         }
     }
-    
+
+    public void waitForAttributeNotEquals(By by, String attribute, String value, int timeInSeconds) {
+        if (isAttributeValue(by, attribute, value, timeInSeconds)) {
+            fail("Attribute '" + attribute + "' timeout, the '" 
+            		+ value 
+            		+ "' value has not bean reached for " + timeInSeconds + " s");        	
+        }
+    }
+
     public boolean compareAttributeValue(By by, String attribute, String value) {
     	return value.equalsIgnoreCase(getElementAttribute(by, attribute));
     }
 
+    public String getElementText(By by) {
+        return driver.findElement(by).getText();
+    }
+    
 }
