@@ -118,6 +118,12 @@ bintray {
             name = project.version
             desc = 'Java Green - BDD style functional testing tool based on Selenium, Cucumber and Spring'
             released = new Date()
+            mavenCentralSync {
+                sync = true
+                user = System.env.MAVEN_USER_TOKEN
+                password = System.env.MAVEN_PASSWORD
+                close = '0'
+            }
         }
     }
 }
