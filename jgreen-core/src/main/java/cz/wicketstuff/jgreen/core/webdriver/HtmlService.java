@@ -134,7 +134,7 @@ public class HtmlService {
      * 
      * @param condition evaluated condition
      * @param timeInSeconds timeout in seconds when condition is evaluated
-     * @return the evaluated condition or <code>false<code> it is timeouted
+     * @return the evaluated condition or <code>false</code> it is timeouted
      */
     public boolean timeoutCondition(final BooleanSupplier condition, int timeInSeconds) {
         boolean ret = false;
