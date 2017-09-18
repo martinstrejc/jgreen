@@ -146,52 +146,6 @@ public class WebDriverBase implements ScreenshotProvider {
 //    }
     
     /*
-    Attribute actions
-     */
-
-    
-    
-//    public void assertAttributeEquals (By by, String attribute, String expectedValue){
-//        assertEquals(expectedValue, getElementAttribute(by, attribute));
-//    }
-//
-//    public void assertAttributeNotEquals (By by, String attribute, String expectedValue){
-//        assertNotEquals(expectedValue, getElementAttribute(by, attribute));
-//    }
-//
-//    public boolean attributeContains(By by, String attribute, String expectedValue) {
-//        return getElementAttribute(by, attribute).contains(expectedValue);
-//    }
-//
-//    public boolean attributeNotContains(By by, String attribute, String expectedValue) {
-//        return !getElementAttribute(by, attribute).contains(expectedValue);
-//    }
-//
-//    public boolean isAttributePresent(By by, String attribute) {
-//        return findElement(by).getAttribute(attribute) != null;
-//    }
-//
-//    public void assertAttributePresent(By by, String attribute) {
-//        assertEquals(true, isAttributePresent(by, attribute));
-//    }
-//
-//    public void assertAttributeNotPresent(By by, String attribute) {
-//        assertEquals(false, isAttributePresent(by, attribute));
-//    }
-//
-//    public void waitForAttributeNotPresent(By by, String attribute) throws InterruptedException {
-//        waitForAttributeNotPresent(getDefaultWaitSeconds(), by, attribute);
-//    }
-//
-//    public void waitForAttributeNotPresent(int timeInSeconds, By by, String attribute) throws InterruptedException {
-//        for (int second = 0; second < timeInSeconds; second++) {
-//            if (!isAttributePresent(by, attribute)) return;
-//            sleep(1000);
-//        }
-//        fail(TIMEOUT);
-//    }
-
-    /*
     Value verification
      */
 //    public String getElementValue(String id) throws Exception {

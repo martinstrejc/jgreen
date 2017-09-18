@@ -17,6 +17,8 @@
 package cz.wicketstuff.jgreen.core.webdriver;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -185,5 +187,47 @@ public class HtmlService {
     	assertThat(getElementText(by), containsString(containedText));
     }
 
-    
+    /*
+    Attribute actions
+    */
+
+    // TODO tests
+	public void assertAttributeEquals(By by, String attribute, String expectedValue) {
+		assertEquals(expectedValue, getElementAttribute(by, attribute));
+	}
+
+    // TODO tests
+	public void assertAttributeNotEquals(By by, String attribute, String expectedValue) {
+		assertNotEquals(expectedValue, getElementAttribute(by, attribute));
+	}
+
+    // TODO tests
+	// TODO check if true/false is really a good solution or rather create an own junit regex matcher
+	// https://code.google.com/archive/p/hamcrest-text-patterns/
+	// https://piotrga.wordpress.com/2009/03/27/hamcrest-regex-matcher/
+	public void assertAttributeMatches(By by, String attribute, String regex) { 
+		assertTrue(getElementAttribute(by, attribute).matches(regex));
+	}
+
+    // TODO tests
+	public boolean attributeContains(By by, String attribute, String expectedValue) {
+		return getElementAttribute(by, attribute).contains(expectedValue);
+	}
+
+    // TODO tests
+	public boolean attributePresents(By by, String attribute) {
+		return getElementAttribute(by, attribute) != null;
+	}
+
+	
+    // TODO tests
+	public void assertAttributePresent(By by, String attribute) {
+		assertEquals(true, attributePresents(by, attribute));
+	}
+
+    // TODO tests
+	public void assertAttributeNotPresent(By by, String attribute) {
+		assertEquals(false, attributePresents(by, attribute));
+	}
+
 }
