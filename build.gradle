@@ -31,7 +31,7 @@ version "${version}"
 
 ext {
     slf4Version = '1.7.25'
-    cucumberVersion = '2.0.0'
+    cucumberVersion = '2.0.1'
     seleniumVersion = '3.5.3'
     springVersion = '4.3.11.RELEASE'
     jUnitVersion = '5.0.0'
