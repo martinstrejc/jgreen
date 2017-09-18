@@ -32,6 +32,6 @@ public interface TimerService {
      * 
      * @param seconds
      */
-    void sleepSeconds(int seconds);
+    void sleepSeconds(long seconds);
 
 }

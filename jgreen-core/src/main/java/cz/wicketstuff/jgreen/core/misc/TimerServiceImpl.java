@@ -33,7 +33,7 @@ public class TimerServiceImpl implements TimerService {
 	}
 
 	@Override
-	public void sleepSeconds(int seconds) {
+	public void sleepSeconds(long seconds) {
 		threadSleep(1000 * seconds);
 	}
 
