@@ -26,4 +26,7 @@ after_success:
 #  - test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload
   - git clone https://github.com/spring-projects/spring-petclinic.git
   - cd spring-petclinic
-  - ./mvnw spring-boot:run
+  - echo "endpoints.shutdown.enabled=true" > application.properties
+  - ./mvnw spring-boot:run&
+  - sleep 60
+  - curl -X POST "http://localhost:8080/manage/shutdown"
