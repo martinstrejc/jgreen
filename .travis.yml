@@ -11,7 +11,7 @@ addons:
 jdk:
   - oraclejdk8
 script:
-  - ./gradlew clean build sonarqube -i
+#  - ./gradlew clean build sonarqube -i
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -22,5 +22,8 @@ cache:
   - '$HOME/.gradle'
   - '.gradle'
 after_success:
-  - ./gradlew artifactoryPublish
-  - test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload
+#  - ./gradlew artifactoryPublish
+#  - test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload
+  - git clone https://github.com/spring-projects/spring-petclinic.git
+  - cd spring-petclinic
+  - ./mvnw spring-boot:run
