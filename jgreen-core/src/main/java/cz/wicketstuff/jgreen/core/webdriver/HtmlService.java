@@ -16,7 +16,12 @@
  */
 package cz.wicketstuff.jgreen.core.webdriver;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.hamcrest.CoreMatchers.containsString;
+
+import java.util.function.BooleanSupplier;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -48,11 +53,19 @@ public class HtmlService {
 		this.timer = timer;
 	}
 
+	/**
+	 * Shortcut method to {@link WebDriver#findElement(By)}.
+	 * The element can be specified by id, xpath, etc.
+	 * 
+	 * @param by the element identifier.
+	 * @return the specified element
+     * @throws NoSuchElementException when the element hasn't been found
+	 */
 	public WebElement findElement(By by) {
         return driver.findElement(by);
     }
 
-    public boolean isElementPresent(By by) {
+    public boolean elementPresents(By by) {
         try {
             findElement(by);
             return true;
@@ -61,35 +74,26 @@ public class HtmlService {
             return false;
         }
     }
-    
-    public boolean isElementPresent(By by, int timeInSeconds) {
-        boolean present = false;
-        int second = 0;
-        while (!(present = isElementPresent(by)) && ++second <= timeInSeconds) {
-        	timer.sleepSecond();
-        }
-        return present;
-    } 
 
-    public void waitForElement(By by, int timeInSeconds) {
-        if (!isElementPresent(by, timeInSeconds)) {
-	        fail("Element " + by.toString() + " has not been found in " 
-	        		+ timeInSeconds + " s");
-        }
+    /**
+     * Shortcut method to {@link WebElement#getText()}, 
+     * where the element is found using <strong>by</strong> argument.
+     * 
+     * @param by the identified on the {@link WebElement} element
+     * @return text of the element
+     * @throws NoSuchElementException when the element hasn't been found
+     */
+    public String getElementText(By by) {
+        return driver.findElement(by).getText();
     }
 
-    public void waitForElementNotPresent(By by, int timeInSeconds) {
-        if (isElementPresent(by, timeInSeconds)) {
-        	fail("Element " + by.toString() + " has been unfortunately found");
-        }
-    }
 
     public void click(By by) {
         findElement(by).click();
     }
     
     public void waitAndClick(By by, int timeInSeconds) {
-        waitForElement(by, timeInSeconds);
+        waitFor(() -> elementPresents(by), timeInSeconds);
         click(by);
     }
 
@@ -97,45 +101,89 @@ public class HtmlService {
         return findElement(by).getAttribute(attribute);
     }
 
-    public boolean isAttributeValue(By by, String attribute, String value, int timeInSeconds) {
-        boolean attr = false;
-        int second = 0;
-        while (!(attr = compareAttributeValue(by, attribute, value)) && ++second <= timeInSeconds) {
-        	timer.sleepSecond();
-        }
-        return attr;
-    }
     
-    public void waitForAttributeTrue(By by, String attribute, int timeInSeconds) {
-    	waitForAttributeEquals(by, attribute, ATTRIBUTE_TRUE, timeInSeconds);
-    }
-
-    public void waitForAttributeFalse(By by, String attribute, int timeInSeconds) {
-    	waitForAttributeEquals(by, attribute, ATTRIBUTE_FALSE, timeInSeconds);
-    }
-
-    public void waitForAttributeEquals(By by, String attribute, String value, int timeInSeconds) {
-        if (!isAttributeValue(by, attribute, value, timeInSeconds)) {
-            fail("Attribute '" + attribute + "' timeout, the '" 
-            		+ value 
-            		+ "' value has not bean reached for " + timeInSeconds + " s");        	
-        }
-    }
-
-    public void waitForAttributeNotEquals(By by, String attribute, String value, int timeInSeconds) {
-        if (isAttributeValue(by, attribute, value, timeInSeconds)) {
-            fail("Attribute '" + attribute + "' timeout, the '" 
-            		+ value 
-            		+ "' value has not bean reached for " + timeInSeconds + " s");        	
-        }
-    }
-
-    public boolean compareAttributeValue(By by, String attribute, String value) {
+    public boolean attributeEqualsIgnoreCase(By by, String attribute, String value) {
     	return value.equalsIgnoreCase(getElementAttribute(by, attribute));
     }
 
-    public String getElementText(By by) {
-        return driver.findElement(by).getText();
+    public boolean attributeTrue(By by, String attribute) {
+    	return attributeEqualsIgnoreCase(by, attribute, ATTRIBUTE_TRUE);
     }
+
+    public boolean attributeFalse(By by, String attribute) {
+    	return attributeEqualsIgnoreCase(by, attribute, ATTRIBUTE_FALSE);
+    }
+
+    public void waitFor(final BooleanSupplier condition, int timeInSeconds) {
+        if (!timeoutCondition(condition, timeInSeconds)) {
+            fail("Timeout");        	
+        }
+    }
+    
+    public void waitForNot(final BooleanSupplier condition, int timeInSeconds) {
+        if (timeoutCondition(condition, timeInSeconds)) {
+            fail("Timeout");        	
+        }
+    }
+
+    /**
+     * Check the condition within the specified timeout. Returns the condition until
+     * the timeout is reached, then the condition is considered as <code>false</code>.
+     * 
+     * @param condition evaluated condition
+     * @param timeInSeconds timeout in seconds when condition is evaluated
+     * @return the evaluated condition or <code>false<code> it is timeouted
+     */
+    public boolean timeoutCondition(final BooleanSupplier condition, int timeInSeconds) {
+        boolean ret = false;
+        int second = 0;
+        while (!(ret = condition.getAsBoolean()) && ++second <= timeInSeconds) {
+        	timer.sleepSecond();
+        }
+        return ret;
+    }
+    
+    // TODO tests
+    public void assertDisplayed(By by) {
+        assertDisplayed(findElement(by));
+    }
+
+    // TODO tests
+    public void assertNotDisplayed(By by) {
+        try {
+            assertNotDisplayed(findElement(by));
+        } catch (NoSuchElementException e) {
+            log.trace("assertNotDisplayed: Element hasn't been found", e);
+        }
+    }
+
+    // TODO tests
+    public void assertDisplayed(WebElement webElement) {
+        if (!webElement.isDisplayed()) {
+            fail(webElement + " element should be displayed.");
+        }
+    }
+
+    // TODO tests
+    public void assertNotDisplayed(WebElement webElement) {
+        if (webElement.isDisplayed()) {
+            fail(webElement + " element should not be displayed.");
+        }
+    }
+
+    /*
+    Text verification
+     */
+
+    // TODO tests
+    public void assertElementText(By by, String expectedText){
+        assertEquals(expectedText, findElement(by).getText());
+    }
+
+    // TODO tests
+    public void assertElementTextContains(By by, String containedText){
+    	assertThat(getElementText(by), containsString(containedText));
+    }
+
     
 }
