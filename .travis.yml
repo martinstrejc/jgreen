@@ -27,13 +27,13 @@ script:
   - if [ "$TRAVIS_BRANCH" == "intTest" ]; then
       whereis google-chrome-stable;
       whereis chromedriver;
-      git clone https://github.com/spring-projects/spring-petclinic.git;
-      cd spring-petclinic;
-      echo "endpoints.shutdown.enabled=true" > application.properties;
-      ./mvnw spring-boot:run &
-      cd ..;
-      ./gradlew :integrationTest:build -i;
-      curl -X POST "http://localhost:8080/manage/shutdown";
+#      git clone https://github.com/spring-projects/spring-petclinic.git;
+#      cd spring-petclinic;
+#      echo "endpoints.shutdown.enabled=true" > application.properties;
+#      ./mvnw spring-boot:run &
+#      cd ..;
+      ./gradlew integrationTest stopPetClinicServer -i;
+#      curl -X POST "http://localhost:8080/manage/shutdown";
     fi
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
