@@ -11,7 +11,18 @@ addons:
 jdk:
   - oraclejdk8
 script:
-#  - ./gradlew clean build sonarqube -i
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    ./gradlew clean build sonarqube artifactoryPublish -i
+    test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload
+  fi
+  - if [ "$TRAVIS_BRANCH" == "intTest" ]; then
+    git clone https://github.com/spring-projects/spring-petclinic.git
+    cd spring-petclinic
+    echo "endpoints.shutdown.enabled=true" > application.properties
+    ./mvnw spring-boot:run &
+    cd ..
+    ./gradlew :integrationTest:build -i
+  fi
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -22,11 +33,6 @@ cache:
   - '$HOME/.gradle'
   - '.gradle'
 after_success:
-#  - ./gradlew artifactoryPublish
-#  - test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload
-  - git clone https://github.com/spring-projects/spring-petclinic.git
-  - cd spring-petclinic
-  - echo "endpoints.shutdown.enabled=true" > application.properties
-  - ./mvnw spring-boot:run&
-  - sleep 60
-  - curl -X POST "http://localhost:8080/manage/shutdown"
+  - if [ "$TRAVIS_BRANCH" == "intTest" ]; then
+    curl -X POST "http://localhost:8080/manage/shutdown"
+  fi

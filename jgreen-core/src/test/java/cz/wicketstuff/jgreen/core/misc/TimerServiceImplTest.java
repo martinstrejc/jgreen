@@ -38,7 +38,7 @@ public class TimerServiceImplTest {
 	}
 
 	/**
-	 * Test method for {@link cz.wicketstuff.jgreen.core.misc.TimerServiceImpl#sleepSeconds(int)}.
+	 * Test method for {@link cz.wicketstuff.jgreen.core.misc.TimerServiceImpl#sleepSeconds(long)}.
 	 */
 	@Test
 	public void sleepSeconds() {
