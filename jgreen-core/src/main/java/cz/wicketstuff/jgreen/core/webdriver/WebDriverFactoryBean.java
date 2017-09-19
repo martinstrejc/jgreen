@@ -20,6 +20,7 @@ import org.apache.commons.lang.BooleanUtils;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -39,6 +40,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author Martin Strejc
  *
  */
+// TODO this class has been copy pasted from the previous project
 public class WebDriverFactoryBean 
     implements FactoryBean<WebDriver>, DisposableBean {
 
@@ -99,16 +101,20 @@ public class WebDriverFactoryBean
     }
     
     private WebDriver chrome() {
-    	System.setProperty("webdriver.chrome.driver", "c:/programs/chromedriver_2_32.exe");
+    	// System.setProperty("webdriver.chrome.driver", "c:/programs/chromedriver_2_32.exe");
     	// System.setProperty("webdriver.chrome.driver", settings.getChromeDriver());
     
+    	ChromeDriverService.Builder builder = new ChromeDriverService.Builder();
+    	builder.usingDriverExecutable(new File(settings.getChromeDriver()));
+    	
     	DesiredCapabilities capabilities = DesiredCapabilities.chrome();
     	ChromeOptions options = new ChromeOptions();
     	// options.addArguments("test-type");
     	// options.setBinary("c:\\programs\\chromedriver.exe");
+    	// options.setBinary("c:/programs/chromedriver_2_32.exe");
     	// capabilities.setCapability("chrome.binary", "c:\\data\\chromedriver.exe");
     	capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-    	return new ChromeDriver(capabilities);
+    	return new ChromeDriver(builder.build(), capabilities);
     }
 
 //    private WebDriver firefox() {
