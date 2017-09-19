@@ -51,7 +51,8 @@ public class HelloWorldGlue  {
 
 	@When("^I type \"([^\"]*)\" to search field$")
 	public void i_type_to_search_field(String searchValue) throws Exception {
-		html.setField(By.id("lst-ib)"), searchValue);
+		this.searchValue = searchValue;
+		html.setField(By.id("lst-ib"), searchValue);
 	}
 
 	@When("^I click Search button$")
@@ -62,8 +63,8 @@ public class HelloWorldGlue  {
 
 	@Then("^I am on search results page$")
 	public void i_am_on_search_results_page() throws Exception {
-		html.waitFor(() -> html.elementPresents(By.id("lst-ib)")), 2);
-		html.assertAttributeEquals(By.id("lst-ib)"), "value", searchValue);
+		html.waitFor(() -> html.elementPresents(By.id("lst-ib")), 2);
+		html.assertAttributeEquals(By.id("lst-ib"), "value", searchValue);
 	}
 
 
