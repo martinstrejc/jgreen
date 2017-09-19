@@ -16,6 +16,9 @@
  */
 package cz.wicketstuff.jgreen.core.webdriver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -30,6 +33,8 @@ public class WebDriverSettings {
 
 //    private String browser;
     private String chromeDriver;
+    
+    private final List<String> arguments = new ArrayList<>();
     
 //    private String geckoDriver;
 
@@ -56,5 +61,9 @@ public class WebDriverSettings {
     public void setChromeDriver(String chromeDriver) {
         this.chromeDriver = chromeDriver;
     }
+
+	public List<String> getArguments() {
+		return arguments;
+	}
 
 }

@@ -113,6 +113,7 @@ public class WebDriverFactoryBean
     	// options.setBinary("c:\\programs\\chromedriver.exe");
     	// options.setBinary("c:/programs/chromedriver_2_32.exe");
     	// capabilities.setCapability("chrome.binary", "c:\\data\\chromedriver.exe");
+    	options.addArguments(settings.getArguments());
     	capabilities.setCapability(ChromeOptions.CAPABILITY, options);
     	return new ChromeDriver(builder.build(), capabilities);
     }
