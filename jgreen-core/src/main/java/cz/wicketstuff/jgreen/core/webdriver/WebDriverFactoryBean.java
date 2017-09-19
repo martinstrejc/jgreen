@@ -20,6 +20,7 @@ import org.apache.commons.lang.BooleanUtils;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
@@ -79,17 +81,17 @@ public class WebDriverFactoryBean
     
     @Override
     public synchronized WebDriver getObject() throws Exception {
-        WebDriver driver;
+        WebDriver driver = chrome();
 
-        if ("firefox".equalsIgnoreCase(settings.getBrowser())) {
-            driver = firefox();
-        } else if ("chrome".equalsIgnoreCase(settings.getBrowser())) {
-            driver = chrome();
-        } else if (BooleanUtils.isTrue(settings.getRemoteEnabled())) {
-            driver = remote();
-        } else {
-            driver = chrome();
-        }
+//        if ("firefox".equalsIgnoreCase(settings.getBrowser())) {
+//            driver = firefox();
+//        } else if ("chrome".equalsIgnoreCase(settings.getBrowser())) {
+//            driver = chrome();
+//        } else if (BooleanUtils.isTrue(settings.getRemoteEnabled())) {
+//            driver = remote();
+//        } else {
+//            driver = chrome();
+//        }
 
         driverInstances.add(driver);
         configureDriver(driver);
@@ -97,20 +99,28 @@ public class WebDriverFactoryBean
     }
     
     private WebDriver chrome() {
-        System.setProperty("webdriver.chrome.driver", settings.getChromeDriver());
-        return new ChromeDriver();
+    	System.setProperty("webdriver.chrome.driver", "c:/programs/chromedriver_2_32.exe");
+    	// System.setProperty("webdriver.chrome.driver", settings.getChromeDriver());
+    
+    	DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+    	ChromeOptions options = new ChromeOptions();
+    	// options.addArguments("test-type");
+    	// options.setBinary("c:\\programs\\chromedriver.exe");
+    	// capabilities.setCapability("chrome.binary", "c:\\data\\chromedriver.exe");
+    	capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+    	return new ChromeDriver(capabilities);
     }
 
-    private WebDriver firefox() {
-        System.setProperty("webdriver.gecko.driver", settings.getGeckoDriver());
-        return new FirefoxDriver();
-    }
-    
-    private WebDriver remote() throws MalformedURLException {
-        WebDriver driver = new RemoteWebDriver(new URL(settings.getRemoteHubUrl()), DesiredCapabilities.firefox());
-        driver.manage().window().setSize(new Dimension(1024, 768));
-        return driver;
-    }
+//    private WebDriver firefox() {
+//        System.setProperty("webdriver.gecko.driver", settings.getGeckoDriver());
+//        return new FirefoxDriver();
+//    }
+//    
+//    private WebDriver remote() throws MalformedURLException {
+//        WebDriver driver = new RemoteWebDriver(new URL(settings.getRemoteHubUrl()), DesiredCapabilities.firefox());
+//        driver.manage().window().setSize(new Dimension(1024, 768));
+//        return driver;
+//    }
     
     protected void configureDriver(WebDriver driver) {
         //todo: configure local webdriver, if needed

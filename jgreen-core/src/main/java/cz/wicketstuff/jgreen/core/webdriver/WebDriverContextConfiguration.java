@@ -16,10 +16,13 @@
  */
 package cz.wicketstuff.jgreen.core.webdriver;
 
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import cz.wicketstuff.jgreen.core.misc.TimerService;
 
 /**
  * @author Martin Strejc
@@ -27,12 +30,18 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(WebDriverSettings.class)
-public class WebDriverConfig {
-    
-  @Bean
-  @Autowired
-  public WebDriverFactoryBean webDriverFacotyrBean(WebDriverSettings settings) {
-      return new WebDriverFactoryBean(settings);
-  }
+public class WebDriverContextConfiguration {
+
+	@Bean
+	@Autowired
+	public HtmlService htmlService(WebDriver webDriver, TimerService timer) {
+		return new HtmlService(webDriver, timer);
+	}
+
+	@Bean
+	@Autowired
+	public WebDriverFactoryBean webDriverFacotyrBean(WebDriverSettings settings) {
+		return new WebDriverFactoryBean(settings);
+	}
 
 }

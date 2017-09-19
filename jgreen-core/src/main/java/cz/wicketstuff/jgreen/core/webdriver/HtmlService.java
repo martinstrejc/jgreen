@@ -55,6 +55,11 @@ public class HtmlService {
 		this.timer = timer;
 	}
 
+	// TODO missing test
+	public void openUrl(String url) {
+		driver.get(url);
+	}
+
 	/**
 	 * Shortcut method to {@link WebDriver#findElement(By)}.
 	 * The element can be specified by id, xpath, etc.

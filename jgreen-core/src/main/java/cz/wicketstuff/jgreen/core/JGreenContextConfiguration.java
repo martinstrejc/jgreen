@@ -24,13 +24,14 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import cz.wicketstuff.jgreen.core.misc.TimerService;
 import cz.wicketstuff.jgreen.core.misc.TimerServiceImpl;
-import cz.wicketstuff.jgreen.core.webdriver.HtmlService;
+import cz.wicketstuff.jgreen.core.webdriver.WebDriverContextConfiguration;
 
 /**
  * @author Martin Strejc
@@ -42,6 +43,7 @@ import cz.wicketstuff.jgreen.core.webdriver.HtmlService;
         "classpath:jgreen.properties", 
         "classpath:jgreen-${spring.profiles.active}.properties"
         }, ignoreResourceNotFound = true)
+@Import({WebDriverContextConfiguration.class})
 @EnableConfigurationProperties(JGreenSettings.class)
 public class JGreenContextConfiguration implements ApplicationListener<ApplicationEvent> {
 	
@@ -69,12 +71,4 @@ public class JGreenContextConfiguration implements ApplicationListener<Applicati
 		return new TimerServiceImpl();
 	}
 	
-	@Bean
-	public HtmlService html(TimerService timer) {
-		// TODO add webdriver here
-		return new HtmlService(null, timer);
-	}
-    
-    
-
 }

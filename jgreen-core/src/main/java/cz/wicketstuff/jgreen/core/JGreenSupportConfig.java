@@ -21,18 +21,19 @@ import org.springframework.context.annotation.Import;
 
 import cz.wicketstuff.jgreen.core.app.AppConfig;
 import cz.wicketstuff.jgreen.core.cucumber.CucumberConfig;
-import cz.wicketstuff.jgreen.core.webdriver.WebDriverConfig;
+import cz.wicketstuff.jgreen.core.webdriver.WebDriverContextConfiguration;
 
 /**
  * @author Martin Strejc
  *
  */
-@Configuration
+// @Configuration
 @Import({ CucumberConfig.class, 
           AppConfig.class, 
-          WebDriverConfig.class
+          WebDriverContextConfiguration.class
         })
 @EnableAspectJAutoProxy(proxyTargetClass = true)
+@Deprecated
 public class JGreenSupportConfig {
 
 }

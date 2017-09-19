@@ -28,25 +28,26 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix="jgreen.webdriver")
 public class WebDriverSettings {
 
-    private String browser;
+//    private String browser;
     private String chromeDriver;
-    private String geckoDriver;
+    
+//    private String geckoDriver;
 
-    @NotNull
-    @Valid
-    private Boolean remoteEnabled;
-
-    @NotNull
-    @Valid
-    private String remoteHubUrl;
-
-    public String getBrowser() {
-        return browser;
-    }
-
-    public void setBrowser(String browser) {
-        this.browser = browser;
-    }
+//    @NotNull
+//    @Valid
+//    private Boolean remoteEnabled;
+//
+//    @NotNull
+//    @Valid
+//    private String remoteHubUrl;
+//
+//    public String getBrowser() {
+//        return browser;
+//    }
+//
+//    public void setBrowser(String browser) {
+//        this.browser = browser;
+//    }
 
     public String getChromeDriver() {
         return chromeDriver;
@@ -56,27 +57,4 @@ public class WebDriverSettings {
         this.chromeDriver = chromeDriver;
     }
 
-    public String getGeckoDriver() {
-        return geckoDriver;
-    }
-
-    public void setGeckoDriver(String geckoDriver) {
-        this.geckoDriver = geckoDriver;
-    }
-
-    public Boolean getRemoteEnabled() {
-        return remoteEnabled;
-    }
-
-    public void setRemoteEnabled(Boolean remoteEnabled) {
-        this.remoteEnabled = remoteEnabled;
-    }
-
-    public String getRemoteHubUrl() {
-        return remoteHubUrl;
-    }
-
-    public void setRemoteHubUrl(String remoteHubUrl) {
-        this.remoteHubUrl = remoteHubUrl;
-    }
 }
