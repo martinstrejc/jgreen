@@ -9,7 +9,3 @@ dependencies {
 sonarqube {
     skipProject = true
 }
-
-build << {
-    sleep(60000)
-}
