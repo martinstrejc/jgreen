@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.wicketstuff.jgreen.core;
+package cz.wicketstuff.jgreen.it;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

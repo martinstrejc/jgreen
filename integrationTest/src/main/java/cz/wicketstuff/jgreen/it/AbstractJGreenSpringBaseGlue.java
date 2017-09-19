@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.wicketstuff.jgreen.core;
+package cz.wicketstuff.jgreen.it;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -36,6 +36,8 @@ import org.springframework.context.ApplicationContextAware;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cz.wicketstuff.jgreen.core.AbstractJGreenSpringBase;
+import cz.wicketstuff.jgreen.core.JGreenSettings;
 
 /**
  * @author Martin Strejc
@@ -113,4 +115,5 @@ public class AbstractJGreenSpringBaseGlue extends AbstractJGreenSpringBase imple
 		assertThat(logWriter.toString(), containsString("a message is really logged via slf4j"));
 	}
 
+	
 }

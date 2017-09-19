@@ -3,7 +3,11 @@ apply plugin: 'java-library'
 dependencies {
     compile project(':jgreen-core')
     compile 'io.cucumber:cucumber-core:' + cucumberVersion
-    compile 'junit:junit:4.12'
+    compile 'org.junit.jupiter:junit-jupiter-api:' + jUnitVersion
+    compile 'org.junit.jupiter:junit-jupiter-engine:' + jUnitVersion
+    compile 'org.slf4j:slf4j-log4j12:' + slf4Version
+    compile 'log4j:log4j:1.2.17'
+    compile 'javax.inject:javax.inject:1'
 }
 
 sonarqube {

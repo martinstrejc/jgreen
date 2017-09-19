@@ -16,25 +16,26 @@
  */
 package cz.wicketstuff.jgreen.it;
 
-import cz.wicketstuff.jgreen.core.cucumber.CucumberRunner;
 import cucumber.api.CucumberOptions;
+import cucumber.api.junit.Cucumber;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Run from Gradle CLI: ./gradlew :cleanTest :test --tests cz.wicketstuff.jgreen.it.CucumberAllTest
+ * Run from Gradle CLI: ./gradlew :cleanTest :test --tests cz.wicketstuff.jgreen.it.JGreenAllTest
  *
  */
-@RunWith(CucumberRunner.class)
+@RunWith(Cucumber.class)
 @CucumberOptions(
         monochrome = true,
         plugin = { "pretty", "html:build/cucumber-reports/html", "json:build/cucumber-reports/cucumber.json" },
-        features = { "src/integrationTest/cucumber" },
+        features = { "src/main/java/cz/wicketstuff/jgreen/it" },
         glue = { "cz.wicketstuff.jgreen.it" },
-        tags = {"~@Ignore"},
+        tags = {"not @Ignore"},
         junit = {"--filename-compatible-names"}
 )
-public class CucumberAllTest {
+public class JGreenAllTest {
 
     @Test
     public void dummyTest() {
