@@ -12,18 +12,18 @@ jdk:
   - oraclejdk8
 script:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    ./gradlew clean build sonarqube artifactoryPublish -i;
-    test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload;
-    git push origin master:intTest;
-  fi
+      ./gradlew clean build sonarqube artifactoryPublish -i;
+      test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload;
+      git push origin master:intTest;
+    fi
   - if [ "$TRAVIS_BRANCH" == "intTest" ]; then
-    git clone https://github.com/spring-projects/spring-petclinic.git;
-    cd spring-petclinic;
-    echo "endpoints.shutdown.enabled=true" > application.properties;
-    ./mvnw spring-boot:run &;
-    cd ..;
-    ./gradlew :integrationTest:build -i;
-  fi
+      git clone https://github.com/spring-projects/spring-petclinic.git;
+      cd spring-petclinic;
+      echo "endpoints.shutdown.enabled=true" > application.properties;
+      ./mvnw spring-boot:run &;
+      cd ..;
+      ./gradlew :integrationTest:build -i;
+    fi
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
