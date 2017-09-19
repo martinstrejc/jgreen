@@ -16,15 +16,7 @@
  */
 package cz.wicketstuff.jgreen.core.webdriver;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.hamcrest.CoreMatchers.containsString;
-
-import java.util.function.BooleanSupplier;
-
+import cz.wicketstuff.jgreen.core.misc.TimerService;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -32,7 +24,10 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cz.wicketstuff.jgreen.core.misc.TimerService;
+import java.util.function.BooleanSupplier;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.*;
 
 /**
  * @author Martin Strejc
@@ -234,5 +229,19 @@ public class HtmlService {
 	public void assertAttributeNotPresent(By by, String attribute) {
 		assertEquals(false, attributePresents(by, attribute));
 	}
+
+    public void setField(By by, CharSequence... keysToSend) {
+        clear(by);
+        sendKeys(by, keysToSend);
+    }
+
+    public void clear(By by) {
+        findElement(by).clear();
+    }
+
+    public void sendKeys(By by, CharSequence... keysToSend) {
+        findElement(by).sendKeys(keysToSend);
+    }
+
 
 }
