@@ -35,5 +35,5 @@ cache:
   - '.gradle'
 after_success:
   - if [ "$TRAVIS_BRANCH" == "intTest" ]; then
-    curl -X POST "http://localhost:8080/manage/shutdown";
-  fi
+      curl -X POST "http://localhost:8080/manage/shutdown";
+    fi
