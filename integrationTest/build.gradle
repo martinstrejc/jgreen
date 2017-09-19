@@ -26,7 +26,7 @@ build << {
 }
 
 task integrationTest(dependsOn: ['startPetClinic', 'build']) << {
-    systemProperty 'spring.profiles.active', 'travis-it'
+    System.setProperty 'spring.profiles.active', 'travis-it'
 }
 
 task clonePetClinic << {
