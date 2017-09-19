@@ -23,6 +23,7 @@ script:
       ./mvnw spring-boot:run &
       cd ..;
       ./gradlew :integrationTest:build -i;
+      curl -X POST "http://localhost:8080/manage/shutdown";
     fi
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -33,7 +34,3 @@ cache:
   - '$HOME/.sonar/cache'
   - '$HOME/.gradle'
   - '.gradle'
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "intTest" ]; then
-      curl -X POST "http://localhost:8080/manage/shutdown";
-    fi
