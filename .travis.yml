@@ -20,7 +20,7 @@ script:
       git clone https://github.com/spring-projects/spring-petclinic.git;
       cd spring-petclinic;
       echo "endpoints.shutdown.enabled=true" > application.properties;
-      ./mvnw spring-boot:run &;
+      ./mvnw spring-boot:run &
       cd ..;
       ./gradlew :integrationTest:build -i;
     fi
