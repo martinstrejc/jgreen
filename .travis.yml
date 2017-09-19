@@ -8,15 +8,25 @@ addons:
       secure: $GITHUB_TOKEN_PASSWORD
     branches:
       - .*
+  chrome: stable
+install:
+  - wget -N http://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip -P ~/
+  - unzip ~/chromedriver_linux64.zip -d ~/
+  - rm ~/chromedriver_linux64.zip
+  - sudo mv -f ~/chromedriver /usr/local/share/
+  - sudo chmod +x /usr/local/share/chromedriver
+  - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
 jdk:
   - oraclejdk8
 script:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
       ./gradlew clean build sonarqube artifactoryPublish -i;
       test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload;
-      git push https://$GITHUB_TOKEN_USER:$GITHUB_TOKEN_PASSWORD@github.com/martinstrejc/jgreen.git master:intTest-test;
+      git push https://$GITHUB_TOKEN_USER:$GITHUB_TOKEN_PASSWORD@github.com/martinstrejc/jgreen.git master:intTest;
     fi
   - if [ "$TRAVIS_BRANCH" == "intTest" ]; then
+      whereis google-chrome-stable
+      whereis chromedriver
       git clone https://github.com/spring-projects/spring-petclinic.git;
       cd spring-petclinic;
       echo "endpoints.shutdown.enabled=true" > application.properties;
