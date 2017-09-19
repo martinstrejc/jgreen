@@ -27,7 +27,7 @@ script:
   - if [ "$TRAVIS_BRANCH" == "intTest" ]; then
       whereis google-chrome-stable;
       whereis chromedriver;
-      ./gradlew integrationTest stopPetClinicServer -i;
+      ./gradlew integrationTest stopPetClinicServerAfter -i;
     fi
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
