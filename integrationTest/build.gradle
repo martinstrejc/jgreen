@@ -19,14 +19,9 @@ sonarqube {
     skipProject = true
 }
 
-build << {
-    println "Running Integration tests"
-    sleep(10000)
+task integrationTest(type: Test, dependsOn: 'test') << {
+    systemProperties['spring.profiles.active'] = System.getProperty('spring.profiles.active')
     println "Integration tests done"
-}
-
-task integrationTest(dependsOn: ['startPetClinic', 'build']) << {
-    System.setProperty 'spring.profiles.active', 'travis-it'
 }
 
 task clonePetClinic << {
@@ -55,12 +50,12 @@ task startPetClinic(type: com.github.psxpaul.task.ExecFork, dependsOn: 'clonePet
     workingDir = "$projectDir/build/spring-petclinic"
     standardOutput = "$buildDir/daemon.log"
     errorOutput = "$buildDir/daemon-error.log"
-    stopAfter = build
+    stopAfter = test
     waitForPort = 8080
 }
 
 ["stopPetClinicServerBefore", "stopPetClinicServerAfter"].each { name ->
-    task "$name" << {
+    task "${name}" << {
         try {
             URL url = new URL("http://localhost:8080/manage/shutdown");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -79,7 +74,7 @@ task startPetClinic(type: com.github.psxpaul.task.ExecFork, dependsOn: 'clonePet
             println "Response: " + response
             sleep(3000)
         } catch (ConnectException e) {
-
+            println "Expected Connection Exception: Pet Clinic server is not running"
         }
     }
 }
@@ -88,13 +83,13 @@ gradle.taskGraph.whenReady {
     if (!gradle.taskGraph.hasTask(":integrationTest:integrationTest")) {
         gradle.taskGraph.allTasks.each {
             def taskName = it.getName()
-            if (it.project == project && taskName == 'build') {
+            if (it.project == project && taskName != 'stopPetClinicServerBefore') {
                 it.onlyIf { false }
             }
         }
     }
 }
 
-stopPetClinicServerAfter.mustRunAfter build
+stopPetClinicServerAfter.mustRunAfter test
 clean.dependsOn stopPetClinicServerBefore
-build.mustRunAfter startPetClinic
+test.dependsOn startPetClinic
