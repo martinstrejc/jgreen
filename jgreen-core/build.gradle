@@ -156,7 +156,7 @@ task junit5CodeCoverageReport(type:JacocoReport){
     }
 }
 
-test.finalizedBy junit5CodeCoverageReport
+junitPlatformTest.finalizedBy junit5CodeCoverageReport
 
 sonarqube {
     properties {
@@ -164,3 +164,5 @@ sonarqube {
         property 'sonar.jacoco.reportPaths', 'build/jacoco/junitPlatformTest.exec'
     }
 }
+
+junitPlatformTest.mustRunAfter clean
