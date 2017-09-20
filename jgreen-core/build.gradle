@@ -1,13 +1,11 @@
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'jacoco'
 apply plugin: "com.jfrog.artifactory"
 
 jacoco {
     toolVersion = '0.7.9'
-    applyTo junitPlatformTest
 }
 
 dependencies {
@@ -15,8 +13,6 @@ dependencies {
     compile 'commons-io:commons-io:2.5'
     compile 'commons-lang:commons-lang:2.6'
     compile 'javax.validation:validation-api:2.0.0.Final'
-    compile 'org.junit.jupiter:junit-jupiter-api:' + jUnitVersion
-    runtime 'org.junit.jupiter:junit-jupiter-engine:' + jUnitVersion
     compile 'org.aspectj:aspectjtools:1.8.10'
     compile 'org.slf4j:slf4j-api:' + slf4Version
 
@@ -145,24 +141,11 @@ artifactory {
     }
 }
 
-task junit5CodeCoverageReport(type:JacocoReport){
-    executionData junitPlatformTest
-    sourceSets sourceSets.main
-    sourceDirectories = files(project.sourceSets.main.allSource.srcDirs)
-    classDirectories = files(project.sourceSets.main.output)
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
-}
-
-junitPlatformTest.finalizedBy junit5CodeCoverageReport
-
 sonarqube {
     properties {
-        property 'sonar.junit.reportPaths', 'build/test-results/junit-platform'
-        property 'sonar.jacoco.reportPaths', 'build/jacoco/junitPlatformTest.exec'
+        property 'sonar.junit.reportPaths', 'build/test-results/test'
+        property 'sonar.jacoco.reportPaths', 'build/jacoco/test.exec'
     }
 }
 
-junitPlatformTest.mustRunAfter clean
+test.mustRunAfter clean
