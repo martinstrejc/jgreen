@@ -7,12 +7,22 @@ apply plugin: "com.github.psxpaul.execfork"
 
 dependencies {
     compile project(':jgreen-core')
+
     compile 'io.cucumber:cucumber-core:' + cucumberVersion
+    compile 'io.cucumber:cucumber-java:' + cucumberVersion
+    compile 'javax.inject:javax.inject:1'
+    compile 'junit:junit:4.12'
+    compile 'log4j:log4j:1.2.17'
+    compile 'org.hamcrest:hamcrest-core:1.3'
     compile 'org.junit.jupiter:junit-jupiter-api:' + jUnitVersion
     compile 'org.junit.jupiter:junit-jupiter-engine:' + jUnitVersion
+    compile 'org.seleniumhq.selenium:selenium-api:' + seleniumVersion
+    compile 'org.slf4j:slf4j-api:' + slf4Version
     compile 'org.slf4j:slf4j-log4j12:' + slf4Version
-    compile 'log4j:log4j:1.2.17'
-    compile 'javax.inject:javax.inject:1'
+    compile 'org.springframework:spring-beans:' + springVersion
+    compile 'org.springframework:spring-context:' + springVersion
+
+    testCompile 'io.cucumber:cucumber-junit:2.0.1'
 }
 
 sonarqube {
