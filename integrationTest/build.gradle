@@ -27,10 +27,7 @@ sonarqube {
     skipProject = true
 }
 
-task integrationTest(type: Test, dependsOn: 'test') << {
-    systemProperties['spring.profiles.active'] = System.getProperty('spring.profiles.active')
-    println "Integration tests done"
-}
+task integrationTest(dependsOn: 'test')
 
 task clonePetClinic << {
     println "Cloning Pet Clinic repository"
@@ -91,7 +88,7 @@ gradle.taskGraph.whenReady {
     if (!gradle.taskGraph.hasTask(":integrationTest:integrationTest")) {
         gradle.taskGraph.allTasks.each {
             def taskName = it.getName()
-            if (it.project == project && taskName != 'stopPetClinicServerBefore') {
+            if (it.project == project && taskName != 'stopPetClinicServerBefore' && taskName != 'clean') {
                 it.onlyIf { false }
             }
         }
@@ -101,3 +98,11 @@ gradle.taskGraph.whenReady {
 stopPetClinicServerAfter.mustRunAfter test
 clean.dependsOn stopPetClinicServerBefore
 test.dependsOn startPetClinic
+
+test {
+    outputs.upToDateWhen { false }
+    if (System.getProperty('spring.profiles.active')) {
+        systemProperties['spring.profiles.active'] = System.getProperty('spring.profiles.active')
+        println "Active Spring Profile: " + System.getProperty('spring.profiles.active')
+    }
+}
