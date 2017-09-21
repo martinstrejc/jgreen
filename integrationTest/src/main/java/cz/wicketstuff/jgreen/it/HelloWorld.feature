@@ -1,6 +1,7 @@
+@Ignore
 Feature: Hello World code that demonstrates new jGreen style
 
-  @Current
+
   Scenario: Go to Google and find BDD mentions
     Given I go to Google.cz page
     And I wait until it is loaded
