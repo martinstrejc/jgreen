@@ -3,6 +3,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'jacoco'
 apply plugin: "com.jfrog.artifactory"
+apply plugin: 'nebula.nebula-bintray'
 
 jacoco {
     toolVersion = '0.7.9'

@@ -17,6 +17,7 @@ buildscript {
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.5.2"
         classpath "org.ajoberstar:grgit:2.0.1"
         classpath "gradle.plugin.com.github.psxpaul:gradle-execfork-plugin:0.1.5"
+        classpath 'com.netflix.nebula:nebula-bintray-plugin:3.5.2'
     }
 }
 
