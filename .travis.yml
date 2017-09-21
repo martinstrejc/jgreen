@@ -20,7 +20,7 @@ jdk:
   - oraclejdk8
 script:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-      ./gradlew clean build sonarqube artifactoryPublish -i;
+      ./gradlew -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInfo.buildUrl=https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_JOB_ID} -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER clean build sonarqube artifactoryPublish -i;
       test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && ./gradlew bintrayUpload;
       git push https://$GITHUB_TOKEN_USER:$GITHUB_TOKEN_PASSWORD@github.com/martinstrejc/jgreen.git master:intTest;
     fi
