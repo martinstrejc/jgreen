@@ -124,19 +124,19 @@ bintray {
     }
 }
 
+def targetRepo = project.version.endsWith('-SNAPSHOT') ? 'oss-snapshot-local' : 'oss-release-local'
+
 artifactory {
-    contextUrl = "https://oss.jfrog.org/artifactory"   //The base Artifactory URL if not overridden by the publisher/resolver
+    contextUrl = "https://oss.jfrog.org/artifactory"
     publish {
         repository {
-            repoKey = 'oss-snapshot-local'
+            repoKey = targetRepo
             username = System.env.BINTRAY_USER
             password = System.env.BINTRAY_API_KEY
             maven = true
         }
         defaults {
             publications('jgreenPublication')
-            publishArtifacts = true
-            publishPom = true
         }
     }
 }
