@@ -243,5 +243,14 @@ public class HtmlService {
         findElement(by).sendKeys(keysToSend);
     }
 
+    /*
+    Text verification
+     */
+
+    public void verifyTextForElement(By by, String text){
+        // verifies if element contains the exact text
+        assertEquals(text, findElement(by).getText());
+    }
+
 
 }
